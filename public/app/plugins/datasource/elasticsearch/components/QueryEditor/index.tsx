@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react';
+import React, { FunctionComponent, useCallback } from 'react';
 import { QueryEditorProps } from '@grafana/data';
 import { ElasticDatasource } from '../../datasource';
 import { ElasticsearchOptions, ElasticsearchQuery } from '../../types';
@@ -12,11 +12,26 @@ import { useNextId } from '../../hooks/useNextId';
 
 export type ElasticQueryEditorProps = QueryEditorProps<ElasticDatasource, ElasticsearchQuery, ElasticsearchOptions>;
 
-export const QueryEditor: FunctionComponent<ElasticQueryEditorProps> = ({ query, onChange, datasource }) => (
-  <ElasticsearchProvider datasource={datasource} onChange={onChange} query={query}>
-    <QueryEditorForm value={query} />
-  </ElasticsearchProvider>
-);
+export const QueryEditor: FunctionComponent<ElasticQueryEditorProps> = ({
+  query,
+  onChange,
+  onRunQuery,
+  datasource,
+}) => {
+  const onQueryChange = useCallback(
+    (query: ElasticsearchQuery) => {
+      onChange(query);
+      onRunQuery();
+    },
+    [onChange, onRunQuery]
+  );
+
+  return (
+    <ElasticsearchProvider datasource={datasource} onChange={onQueryChange} query={query}>
+      <QueryEditorForm value={query} />
+    </ElasticsearchProvider>
+  );
+};
 
 interface Props {
   value: ElasticsearchQuery;
