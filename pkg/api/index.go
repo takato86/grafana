@@ -175,20 +175,12 @@ func (hs *HTTPServer) getNavTree(c *models.ReqContext, hasEditPerm bool) ([]*dto
 	// 	})
 	// }
 	// add menu
-	navTree = append(navTree, &dtos.NavLink{
-		Text:       "メニュー",
-		Id:         "menu",
-		SubTitle:   "menu",
-		Icon:       "apps",
-		Url:        setting.AppSubUrl + "/",
-		SortWeight: dtos.WeightDashboard,
-	})
 
 	navTree = append(navTree, &dtos.NavLink{
 		Text:       "システム状態",
 		Id:         "system status",
 		SubTitle:   "system status",
-		Icon:       "apps",
+		Icon:       "servicemark",
 		Url:        setting.AppSubUrl + "/",
 		SortWeight: dtos.WeightDashboard,
 	})
@@ -197,7 +189,7 @@ func (hs *HTTPServer) getNavTree(c *models.ReqContext, hasEditPerm bool) ([]*dto
 		Text:       "異常履歴",
 		Id:         "alert log",
 		SubTitle:   "alert log",
-		Icon:       "apps",
+		Icon:       "exclamation-triangle",
 		Url:        setting.AppSubUrl + "/",
 		SortWeight: dtos.WeightDashboard,
 	})
@@ -206,7 +198,7 @@ func (hs *HTTPServer) getNavTree(c *models.ReqContext, hasEditPerm bool) ([]*dto
 		Text:       "メンテナンス履歴",
 		Id:         "maintenance logs",
 		SubTitle:   "maintenance logs",
-		Icon:       "apps",
+		Icon:       "constructor",
 		Url:        setting.AppSubUrl + "/",
 		SortWeight: dtos.WeightDashboard,
 	})
@@ -215,7 +207,7 @@ func (hs *HTTPServer) getNavTree(c *models.ReqContext, hasEditPerm bool) ([]*dto
 		Text:       "MSSカウント",
 		Id:         "mss count",
 		SubTitle:   "mss count",
-		Icon:       "apps",
+		Icon:       "adjust-circle",
 		Url:        setting.AppSubUrl + "/",
 		SortWeight: dtos.WeightDashboard,
 	})
@@ -224,7 +216,7 @@ func (hs *HTTPServer) getNavTree(c *models.ReqContext, hasEditPerm bool) ([]*dto
 		Text:       "PLC一覧",
 		Id:         "plcs",
 		SubTitle:   "plcs",
-		Icon:       "apps",
+		Icon:       "adjust-half",
 		Url:        setting.AppSubUrl + "/",
 		SortWeight: dtos.WeightDashboard,
 	})
@@ -233,7 +225,7 @@ func (hs *HTTPServer) getNavTree(c *models.ReqContext, hasEditPerm bool) ([]*dto
 		Text:       "PC一覧",
 		Id:         "pcs",
 		SubTitle:   "pcs",
-		Icon:       "apps",
+		Icon:       "desktop",
 		Url:        setting.AppSubUrl + "/",
 		SortWeight: dtos.WeightDashboard,
 	})
@@ -242,7 +234,7 @@ func (hs *HTTPServer) getNavTree(c *models.ReqContext, hasEditPerm bool) ([]*dto
 		Text:       "タグを追加",
 		Id:         "add tags",
 		SubTitle:   "add tags",
-		Icon:       "apps",
+		Icon:       "plus",
 		Url:        setting.AppSubUrl + "/",
 		SortWeight: dtos.WeightDashboard,
 	})
