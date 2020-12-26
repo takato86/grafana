@@ -50,6 +50,8 @@ public/css/*.min.css
 
 # /data/*
 /bin/*
+/data/log
+/data/grafana.db
 
 # devenv
 /devenv/docker-compose.yaml
