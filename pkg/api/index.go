@@ -135,29 +135,29 @@ func getAppLinks(c *models.ReqContext) ([]*dtos.NavLink, error) {
 func (hs *HTTPServer) getNavTree(c *models.ReqContext, hasEditPerm bool) ([]*dtos.NavLink, error) {
 	navTree := []*dtos.NavLink{}
 
-	// if hasEditPerm {
-	// 	children := []*dtos.NavLink{
-	// 		{Text: "Dashboard", Icon: "apps", Url: setting.AppSubUrl + "/dashboard/new"},
-	// 	}
-	// 	if c.OrgRole == models.ROLE_ADMIN || c.OrgRole == models.ROLE_EDITOR {
-	// 		children = append(children, &dtos.NavLink{
-	// 			Text: "Folder", SubTitle: "Create a new folder to organize your dashboards", Id: "folder",
-	// 			Icon: "folder-plus", Url: setting.AppSubUrl + "/dashboards/folder/new",
-	// 		})
-	// 	}
-	// 	children = append(children, &dtos.NavLink{
-	// 		Text: "Import", SubTitle: "Import dashboard from file or Grafana.com", Id: "import", Icon: "import",
-	// 		Url: setting.AppSubUrl + "/dashboard/import",
-	// 	})
-	// 	navTree = append(navTree, &dtos.NavLink{
-	// 		Text:       "Create",
-	// 		Id:         "create",
-	// 		Icon:       "plus",
-	// 		Url:        setting.AppSubUrl + "/dashboard/new",
-	// 		Children:   children,
-	// 		SortWeight: dtos.WeightCreate,
-	// 	})
-	// }
+	if hasEditPerm {
+		children := []*dtos.NavLink{
+			{Text: "Dashboard", Icon: "apps", Url: setting.AppSubUrl + "/dashboard/new"},
+		}
+		if c.OrgRole == models.ROLE_ADMIN || c.OrgRole == models.ROLE_EDITOR {
+			children = append(children, &dtos.NavLink{
+				Text: "Folder", SubTitle: "Create a new folder to organize your dashboards", Id: "folder",
+				Icon: "folder-plus", Url: setting.AppSubUrl + "/dashboards/folder/new",
+			})
+		}
+		children = append(children, &dtos.NavLink{
+			Text: "Import", SubTitle: "Import dashboard from file or Grafana.com", Id: "import", Icon: "import",
+			Url: setting.AppSubUrl + "/dashboard/import",
+		})
+		navTree = append(navTree, &dtos.NavLink{
+			Text:       "Create",
+			Id:         "create",
+			Icon:       "plus",
+			Url:        setting.AppSubUrl + "/dashboard/new",
+			Children:   children,
+			SortWeight: dtos.WeightCreate,
+		})
+	}
 
 	dashboardChildNavs := []*dtos.NavLink{
 		{Text: "Home", Id: "home", Url: setting.AppSubUrl + "/", Icon: "home-alt", HideFromTabs: true},
@@ -166,14 +166,14 @@ func (hs *HTTPServer) getNavTree(c *models.ReqContext, hasEditPerm bool) ([]*dto
 		{Text: "Playlists", Id: "playlists", Url: setting.AppSubUrl + "/playlists", Icon: "presentation-play"},
 	}
 
-	// if c.IsSignedIn {
-	// 	dashboardChildNavs = append(dashboardChildNavs, &dtos.NavLink{
-	// 		Text: "Snapshots",
-	// 		Id:   "snapshots",
-	// 		Url:  setting.AppSubUrl + "/dashboard/snapshots",
-	// 		Icon: "camera",
-	// 	})
-	// }
+	if c.IsSignedIn {
+		dashboardChildNavs = append(dashboardChildNavs, &dtos.NavLink{
+			Text: "Snapshots",
+			Id:   "snapshots",
+			Url:  setting.AppSubUrl + "/dashboard/snapshots",
+			Icon: "camera",
+		})
+	}
 	// add menu
 
 	navTree = append(navTree, &dtos.NavLink{
