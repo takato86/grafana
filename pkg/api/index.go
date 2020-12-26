@@ -139,6 +139,19 @@ func (hs *HTTPServer) getNavTree(c *models.ReqContext, hasEditPerm bool) ([]*dto
 		children := []*dtos.NavLink{
 			{Text: "Dashboard", Icon: "apps", Url: setting.AppSubUrl + "/dashboard/new"},
 		}
+		children = append(children, &dtos.NavLink{
+			Text: "Graph model", SubTitle: "view graph_model", Id: "graph_model", Icon: "apps",
+			Url: setting.AppSubUrl + "/d/uWuaL50Gz/shinario1-2?orgId=1",
+		})
+		children = append(children, &dtos.NavLink{
+			Text: "Graph model matterport jump", SubTitle: "view graph_model_matterport_jump", Id: "graph_model_matterport_jump", Icon: "apps",
+			Url: setting.AppSubUrl + "/d/S-ygvAAMk/grafana-sample?orgId=1",
+		})
+		children = append(children, &dtos.NavLink{
+			Text: "Graph model senario3", SubTitle: "view graph_model_senario3", Id: "graph_model_senario3", Icon: "apps",
+			Url: setting.AppSubUrl + "/d/Senario3/shinario3?orgId=1",
+		})
+
 		if c.OrgRole == models.ROLE_ADMIN || c.OrgRole == models.ROLE_EDITOR {
 			children = append(children, &dtos.NavLink{
 				Text: "Folder", SubTitle: "Create a new folder to organize your dashboards", Id: "folder",
@@ -149,6 +162,7 @@ func (hs *HTTPServer) getNavTree(c *models.ReqContext, hasEditPerm bool) ([]*dto
 			Text: "Import", SubTitle: "Import dashboard from file or Grafana.com", Id: "import", Icon: "import",
 			Url: setting.AppSubUrl + "/dashboard/import",
 		})
+
 		navTree = append(navTree, &dtos.NavLink{
 			Text:       "Create",
 			Id:         "create",
