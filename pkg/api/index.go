@@ -135,29 +135,29 @@ func getAppLinks(c *models.ReqContext) ([]*dtos.NavLink, error) {
 func (hs *HTTPServer) getNavTree(c *models.ReqContext, hasEditPerm bool) ([]*dtos.NavLink, error) {
 	navTree := []*dtos.NavLink{}
 
-	if hasEditPerm {
-		children := []*dtos.NavLink{
-			{Text: "Dashboard", Icon: "apps", Url: setting.AppSubUrl + "/dashboard/new"},
-		}
-		if c.OrgRole == models.ROLE_ADMIN || c.OrgRole == models.ROLE_EDITOR {
-			children = append(children, &dtos.NavLink{
-				Text: "Folder", SubTitle: "Create a new folder to organize your dashboards", Id: "folder",
-				Icon: "folder-plus", Url: setting.AppSubUrl + "/dashboards/folder/new",
-			})
-		}
-		children = append(children, &dtos.NavLink{
-			Text: "Import", SubTitle: "Import dashboard from file or Grafana.com", Id: "import", Icon: "import",
-			Url: setting.AppSubUrl + "/dashboard/import",
-		})
-		navTree = append(navTree, &dtos.NavLink{
-			Text:       "Create",
-			Id:         "create",
-			Icon:       "plus",
-			Url:        setting.AppSubUrl + "/dashboard/new",
-			Children:   children,
-			SortWeight: dtos.WeightCreate,
-		})
-	}
+	// if hasEditPerm {
+	// 	children := []*dtos.NavLink{
+	// 		{Text: "Dashboard", Icon: "apps", Url: setting.AppSubUrl + "/dashboard/new"},
+	// 	}
+	// 	if c.OrgRole == models.ROLE_ADMIN || c.OrgRole == models.ROLE_EDITOR {
+	// 		children = append(children, &dtos.NavLink{
+	// 			Text: "Folder", SubTitle: "Create a new folder to organize your dashboards", Id: "folder",
+	// 			Icon: "folder-plus", Url: setting.AppSubUrl + "/dashboards/folder/new",
+	// 		})
+	// 	}
+	// 	children = append(children, &dtos.NavLink{
+	// 		Text: "Import", SubTitle: "Import dashboard from file or Grafana.com", Id: "import", Icon: "import",
+	// 		Url: setting.AppSubUrl + "/dashboard/import",
+	// 	})
+	// 	navTree = append(navTree, &dtos.NavLink{
+	// 		Text:       "Create",
+	// 		Id:         "create",
+	// 		Icon:       "plus",
+	// 		Url:        setting.AppSubUrl + "/dashboard/new",
+	// 		Children:   children,
+	// 		SortWeight: dtos.WeightCreate,
+	// 	})
+	// }
 
 	dashboardChildNavs := []*dtos.NavLink{
 		{Text: "Home", Id: "home", Url: setting.AppSubUrl + "/", Icon: "home-alt", HideFromTabs: true},
@@ -166,14 +166,81 @@ func (hs *HTTPServer) getNavTree(c *models.ReqContext, hasEditPerm bool) ([]*dto
 		{Text: "Playlists", Id: "playlists", Url: setting.AppSubUrl + "/playlists", Icon: "presentation-play"},
 	}
 
-	if c.IsSignedIn {
-		dashboardChildNavs = append(dashboardChildNavs, &dtos.NavLink{
-			Text: "Snapshots",
-			Id:   "snapshots",
-			Url:  setting.AppSubUrl + "/dashboard/snapshots",
-			Icon: "camera",
-		})
-	}
+	// if c.IsSignedIn {
+	// 	dashboardChildNavs = append(dashboardChildNavs, &dtos.NavLink{
+	// 		Text: "Snapshots",
+	// 		Id:   "snapshots",
+	// 		Url:  setting.AppSubUrl + "/dashboard/snapshots",
+	// 		Icon: "camera",
+	// 	})
+	// }
+	// add menu
+
+	navTree = append(navTree, &dtos.NavLink{
+		Text:       "システム状態",
+		Id:         "system status",
+		SubTitle:   "system status",
+		Icon:       "servicemark",
+		Url:        setting.AppSubUrl + "/",
+		SortWeight: dtos.WeightDashboard,
+	})
+
+	navTree = append(navTree, &dtos.NavLink{
+		Text:       "異常履歴",
+		Id:         "alert log",
+		SubTitle:   "alert log",
+		Icon:       "exclamation-triangle",
+		Url:        setting.AppSubUrl + "/",
+		SortWeight: dtos.WeightDashboard,
+	})
+
+	navTree = append(navTree, &dtos.NavLink{
+		Text:       "メンテナンス履歴",
+		Id:         "maintenance logs",
+		SubTitle:   "maintenance logs",
+		Icon:       "constructor",
+		Url:        setting.AppSubUrl + "/",
+		SortWeight: dtos.WeightDashboard,
+	})
+
+	navTree = append(navTree, &dtos.NavLink{
+		Text:       "MSSカウント",
+		Id:         "mss count",
+		SubTitle:   "mss count",
+		Icon:       "adjust-circle",
+		Url:        setting.AppSubUrl + "/",
+		SortWeight: dtos.WeightDashboard,
+	})
+
+	navTree = append(navTree, &dtos.NavLink{
+		Text:       "PLC一覧",
+		Id:         "plcs",
+		SubTitle:   "plcs",
+		Icon:       "adjust-half",
+		Url:        setting.AppSubUrl + "/",
+		SortWeight: dtos.WeightDashboard,
+	})
+
+	navTree = append(navTree, &dtos.NavLink{
+		Text:       "PC一覧",
+		Id:         "pcs",
+		SubTitle:   "pcs",
+		Icon:       "desktop",
+		Url:        setting.AppSubUrl + "/",
+		SortWeight: dtos.WeightDashboard,
+	})
+
+	navTree = append(navTree, &dtos.NavLink{
+		Text:       "タグを追加",
+		Id:         "add tags",
+		SubTitle:   "add tags",
+		Icon:       "plus",
+		Url:        setting.AppSubUrl + "/",
+		SortWeight: dtos.WeightDashboard,
+	})
+
+	// hide
+	return navTree, nil
 
 	navTree = append(navTree, &dtos.NavLink{
 		Text:       "Dashboards",
