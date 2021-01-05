@@ -2,7 +2,7 @@ import { e2e } from '../index';
 
 export enum PanelMenuItems {
   Edit = 'Edit',
-  Inspect = 'Inspect',
+  Inspect = 'Inspect2',
 }
 
 export const openPanelMenuItem = (menu: PanelMenuItems, panelTitle = 'Panel Title') => {
