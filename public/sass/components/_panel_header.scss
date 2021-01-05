@@ -21,15 +21,17 @@ $panel-header-no-title-zindex: 1;
 .panel-title-container {
   cursor: move;
   word-wrap: break-word;
-  display: block;
+  display: inline-block;
+  width: 90%;
 }
 
 .panel-title {
+  text-align: center;
   border: 0px;
   font-weight: $font-weight-semi-bold;
   position: relative;
   width: 100%;
-  display: flex;
+  display: block;
   flex-wrap: nowrap;
   justify-content: center;
   height: $panel-header-height;
