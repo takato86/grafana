@@ -138,6 +138,7 @@ export class PanelHeader extends PureComponent<Props, State> {
         panelDom.style.height = '45px';
       }
     }
+    return;
   };
 
   // This will show one icon for each severity
@@ -220,14 +221,15 @@ export class PanelHeader extends PureComponent<Props, State> {
               )}
               {data.request && data.request.timeInfo && (
                 <span className="panel-time-info">
-                  <Icon name="clock-nine" size="sm" /> {data.request.timeInfo}
+                  <Icon name="clock-nine" size="xl" /> {data.request.timeInfo}
                 </span>
               )}
             </div>
           </div>
-          <button style={{ float: 'right' }} onClick={this.resizePanel}>
-            +
-          </button>
+
+          <span onClick={this.resizePanel} style={{ float: 'right', marginRight: '10px' }}>
+            <Icon name="compress" size="sm" />
+          </span>
         </div>
       </>
     );

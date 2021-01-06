@@ -245,7 +245,7 @@ $navbar-button-border: #2f2f32;
 
 // Sidemenu
 // -------------------------
-$side-menu-bg: $panel-bg;
+$side-menu-bg: ${theme.palette.white};
 $side-menu-bg-mobile: $panel-bg;
 $side-menu-border: none;
 $side-menu-item-hover-bg: ${theme.colors.bg2};
