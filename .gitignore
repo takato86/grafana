@@ -48,8 +48,9 @@ public/css/*.min.css
 .vs/
 .eslintcache
 
-/data/*
+# /data/*
 /bin/*
+/data/log
 
 # devenv
 /devenv/docker-compose.yaml

@@ -23,6 +23,7 @@ export const commonColorsPalette = {
 
   // New reds palette used by next-gen form elements
   red88: '#e02f44',
+  white: '#ffffff',
 };
 
 const SPACING_BASE = 8;

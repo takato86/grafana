@@ -124,6 +124,23 @@ export class PanelHeader extends PureComponent<Props, State> {
     });
   };
 
+  resizePanel = () => {
+    const { panel } = this.props;
+    const panelDom = document.getElementById(`panel-${panel.id}`);
+    if (panelDom) {
+      let css = panelDom.getAttribute('style');
+      if (!css) {
+        return;
+      }
+      if (panelDom.style.height === '45px') {
+        panelDom.style.height = '500px';
+      } else {
+        panelDom.style.height = '45px';
+      }
+    }
+    return;
+  };
+
   // This will show one icon for each severity
   renderNotice = (notice: QueryResultMetaNotice) => {
     let iconName: IconName = 'info-circle';
@@ -204,11 +221,15 @@ export class PanelHeader extends PureComponent<Props, State> {
               )}
               {data.request && data.request.timeInfo && (
                 <span className="panel-time-info">
-                  <Icon name="clock-nine" size="sm" /> {data.request.timeInfo}
+                  <Icon name="clock-nine" size="xl" /> {data.request.timeInfo}
                 </span>
               )}
             </div>
           </div>
+
+          <span onClick={this.resizePanel} style={{ float: 'right', marginRight: '10px' }}>
+            <Icon name="compress" size="sm" />
+          </span>
         </div>
       </>
     );

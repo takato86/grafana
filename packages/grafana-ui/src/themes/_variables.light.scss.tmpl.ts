@@ -239,7 +239,7 @@ $navbar-button-border: $gray-4;
 
 // Sidemenu
 // -------------------------
-$side-menu-bg: ${theme.palette.gray15};
+$side-menu-bg: ${theme.palette.white};
 $side-menu-border: 1px solid ${theme.palette.gray25};
 $side-menu-bg-mobile: rgba(0, 0, 0, 0); //$gray-6;
 $side-menu-item-hover-bg: ${theme.palette.gray25};

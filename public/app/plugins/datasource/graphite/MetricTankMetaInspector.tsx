@@ -125,7 +125,7 @@ const getStyles = stylesFactory(() => {
   const { theme } = config;
   const borderColor = theme.isDark ? theme.palette.gray25 : theme.palette.gray85;
   const background = theme.isDark ? theme.palette.dark1 : theme.palette.white;
-  const headerBg = theme.isDark ? theme.palette.gray15 : theme.palette.gray85;
+  const headerBg = theme.isDark ? theme.palette.white : theme.palette.white;
 
   return {
     metaItem: css`

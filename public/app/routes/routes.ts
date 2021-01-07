@@ -125,6 +125,16 @@ export function setupAngularRoutes($routeProvider: route.IRouteProvider, $locati
           ),
       },
     })
+    .when('/dashboard/graph_model', {
+      template: '<react-container />',
+      reloadOnSearch: false,
+      resolve: {
+        component: () =>
+          SafeDynamicImport(
+            import(/* webpackChunkName: "DashboardImport"*/ 'app/features/manage-dashboards/DashboardImportPage')
+          ),
+      },
+    })
     .when('/datasources', {
       template: '<react-container />',
       reloadOnSearch: false,
