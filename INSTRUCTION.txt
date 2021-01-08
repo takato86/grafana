@@ -1,0 +1,136 @@
+====================
+ 前提 
+====================
+Windows PCを使用することを前提としています。
+
+====================
+ 初回起動時 
+====================
+
+1. Gitをここからダウンロードし、インストールしてください。
+https://git-scm.com/downloads
+
+2. pythonをここからダウンロードし、インストールしてください。
+https://pythonlinks.python.jp/ja/index.html
+バージョンは3.8.6を選択してください。(※必ず64bit版をインストールしてください)
+
+3. mysqlをここからダウンロードし、インストールしてください。
+https://dev.mysql.com/downloads/mysql/
+
+4. VisualStudioをダウンロードしC++ x64/x86 ビルドツールをインストールしてください。
+https://visualstudio.microsoft.com/ja/downloads/
+「コミュニティ」「無料ダウンロード」よりvs_communityをダウンロードし、インストーラーを起動。
+「個別のコンポーネント」から「Visual C++」を検索して、「C++ x64/x86 ビルドツール」を選択してインストールしてください。
+
+5. Google Cloud SDKをダウンロードしインストールしてください。
+https://dl.google.com/dl/cloudsdk/channels/rapid/GoogleCloudSDKInstaller.exe?hl=JA
+
+6. Google Cloud SDKを起動し、初期化を行ってください。
+gcloud init
+
+使用しているgoogleアカウントを選択してください。
+プロジェクト「tkk-digital-twin」を選択してください。
+タイムゾーンの選択を促された場合、asia-eastX-X系を選択してください。
+
+7. gitよりソースコードを取得してください。
+git clone https://[bitbucketのアカウント名]@bitbucket.org/datumix/digital-twin-app.git
+
+8. 必要なライブラリのインストールをしてください。
+cd digital-twin-app
+※ソースコードをチェックアウトしたディレクトリに移動します。
+pip install -r requirements.txt
+
+9. Cloud SQLの接続をしてください。
+
+Windowsの検索バーで「サービス」と検索してサービスアプリを起動、
+(スタートメニュー->Windows管理ツール->サービスの順に選択しても可能)
+インストール済みのMySQLを停止します。
+
+その後、ソースコードのチェックアウトディレクトリで、以下のコマンドを実行します。
+gcloud auth login
+gcloud auth application-default login
+cd matterport
+wake_cloud_sql.sh
+
+10. matterportアプリの起動してください。
+python manage.py runserver
+
+11. ブラウザからこのURLにアクセスすると、matterportサンプルアプリが表示されます。
+http://localhost:8000
+
+12. SafieのProxyサーバーを起動
+matterpor
+cd ../safie_relay
+python main.py&
+
+13. Safieの動画配信サーバーを起動
+cd ../safie_redistribute
+npm install
+node main.js
+この段階で下記リンクでMatterPortとSafieの挙動を確認してください。
+http://localhost:8000/safie
+
+14. gitよりソースコードを取得してください。
+git clone https://[bitbucketのアカウント名]@bitbucket.org/datumix/grafana.git
+cd grafana
+
+15. 下記リンクよりnode.jsをインストールしてください。
+https://nodejs.org/en/download/
+
+16. パッケージをインストールしてください。
+grafanaディレクトリ直下で下記コマンドを実行してください。
+npm install yarn
+yarn install
+
+17. grafanaを実行してください。
+yarn start &
+make run
+
+18. ブラウザからこのURLにアクセスすると、Grafanaがログイン画面が表示されます。
+http://localhost:3000/
+ユーザーID admin
+パスワード admin
+を入力しログインしてください。
+
+19. データソースを登録してください。
+左サイドメニューからConfiguration -> Data Sourcesを選択。
+Add data sourceを選択。
+MySQLを選択。
+-----------------------------
+Databasename: digital_twin
+User: root
+Pass: DigitalTwin1234!
+-----------------------------
+に設定して、Save&Testを選択。
+
+20. GrafanaでグラフとMatterPortのモデルが表示されるかを確認。
+
+
+=====================================
+ ２回目以降は下記の手順のみでOKです 
+=====================================
+
+1. gitよりソースコードを取得してください。
+cd grafana
+git pull
+cd digital_twin_app
+git pull
+
+2. Cloud SQLの接続してください。
+cd matterport
+wake_cloud_sql.sh
+
+3. 関連アプリの起動してください。
+cd matterport
+python manage.py runserver
+cd safie_relay
+python main.py
+cd safie_redistribute
+node main.js
+
+4. Grafanaを起動してください。
+yarn start&
+make run
+
+5. ブラウザからこのURLにアクセスすると、Grafanaが表示されます。
+http://localhost:3000/
