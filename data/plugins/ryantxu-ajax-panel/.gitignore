@@ -1,9 +1,6 @@
 node_modules
 npm-debug.log
 .tscache/
-.rpt2_cache/
 
 # Remove dist on master branch
 dist/
-coverage/
-ci/

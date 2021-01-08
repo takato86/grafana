@@ -1,22 +1,22 @@
-import { MetricsPanelCtrl } from 'grafana/app/plugins/sdk';
+///<reference path="../node_modules/grafana-sdk-mocks/app/headers/common.d.ts" />
+
+import {MetricsPanelCtrl} from 'app/plugins/sdk';
 import $ from 'jquery';
 import _ from 'lodash';
-import appEvents from 'grafana/app/core/app_events';
+import appEvents from 'app/core/app_events';
 import moment from 'moment';
 import './style.css';
-import { DSInfo, RenderMode } from './types';
-import { examples } from './examples';
-
-import { DataQueryResponse, DataSourceApi } from '@grafana/ui';
+import {DSInfo, RenderMode} from './types';
+import {examples} from './examples';
 
 class AjaxCtrl extends MetricsPanelCtrl {
   static templateUrl = 'partials/module.html';
   static scrollable = true;
 
-  paramsFn?: Function;
-  headerFn?: Function;
+  params_fn?: Function;
+  header_fn?: Function;
 
-  isIframe = false;
+  isIframe: boolean = false;
   objectURL: any = null; // Used for images
   scopedVars: any = null; // updated each request
 
@@ -26,7 +26,7 @@ class AjaxCtrl extends MetricsPanelCtrl {
 
   requestCount = 0;
   lastRequestTime = -1;
-  fnError?: any;
+  fn_error?: any;
 
   // Used in the editor
   lastURL?: string;
@@ -36,16 +36,16 @@ class AjaxCtrl extends MetricsPanelCtrl {
 
   /** @ngInject */
   constructor(
-    $scope: any,
-    $injector: any,
-    public $rootScope: any,
-    public $q: any,
-    public $timeout: any,
-    public $sce: any,
-    public templateSrv: any,
-    public datasourceSrv: any,
-    public backendSrv: any,
-    public $compile: any
+    $scope,
+    $injector,
+    public $rootScope,
+    public $q,
+    public $timeout,
+    public $sce,
+    public templateSrv,
+    public datasourceSrv,
+    public backendSrv,
+    public $compile
   ) {
     super($scope, $injector);
 
@@ -71,16 +71,16 @@ class AjaxCtrl extends MetricsPanelCtrl {
     this.events.on('render', this.notifyWhenRenderingCompleted.bind(this));
   }
 
-  onDataSnapshotLoad(snapshotData: any) {
+  onDataSnapshotLoad(snapshotData) {
     this.onDataReceived(snapshotData);
   }
 
-  onDataError(err: any) {
+  onDataError(err) {
     console.log('onDataError', err);
   }
 
   // Having this function pust ths query sidebar on
-  onDataReceived(dataList: any) {
+  onDataReceived(dataList) {
     this.process(dataList);
     this.loading = false;
   }
@@ -96,7 +96,7 @@ class AjaxCtrl extends MetricsPanelCtrl {
       this.timer = this.$timeout(() => {
         this.timer = undefined;
 
-        if (this.requestCount !== requestID) {
+        if (this.requestCount != requestID) {
           return;
         }
 
@@ -127,14 +127,14 @@ class AjaxCtrl extends MetricsPanelCtrl {
 
     console.log('Loading example', example);
     const first = examples[0].config;
-    _.forEach(_.keys(first), (k: any) => {
+    _.forEach(_.keys(first), k => {
       delete this.panel[k];
     });
     _.defaults(this.panel, example.config);
     _.defaults(this.panel, first);
 
     $(window).scrollTop(0);
-    appEvents.emit('dash-scroll', { animate: false, evt: 0 });
+    appEvents.emit('dash-scroll', {animate: false, evt: 0});
 
     this.$rootScope.appEvent('alert-success', ['Loaded Example Configuraiton', example.name]);
 
@@ -151,8 +151,8 @@ class AjaxCtrl extends MetricsPanelCtrl {
 
   getCurrentParams(scopedVars?: any) {
     let params = {};
-    if (this.paramsFn) {
-      params = this.paramsFn(this);
+    if (this.params_fn) {
+      params = this.params_fn(this);
     }
     // if(false) {
     //   this.templateSrv.fillVariableValuesForUrl(params, scopedVars);
@@ -169,8 +169,8 @@ class AjaxCtrl extends MetricsPanelCtrl {
   }
 
   getHeaders(scopedVars?: any) {
-    if (this.headerFn) {
-      return this.headerFn(this);
+    if (this.header_fn) {
+      return this.header_fn(this);
     }
     return null;
   }
@@ -194,9 +194,9 @@ class AjaxCtrl extends MetricsPanelCtrl {
   /**
    * @override
    */
-  updateTimeRange(datasource?: DataSourceApi) {
+  updateTimeRange(datasource?) {
     const before = this.timeInfo;
-    const v = super.updateTimeRange();
+    const v = super.updateTimeRange(datasource);
     if (this.panel.showTime && before) {
       this.timeInfo = before;
     }
@@ -207,31 +207,30 @@ class AjaxCtrl extends MetricsPanelCtrl {
    * Rather than issue a datasource query, we will call our ajax request
    * @override
    */
-  issueQueries(datasource: DataSourceApi) {
+  issueQueries(datasource) {
     if (this.isUsingMetricQuery()) {
       return super.issueQueries(datasource);
     }
 
-    this.datasource = datasource;
-    if (this.fnError) {
+    if (this.fn_error) {
       this.loading = false;
-      this.error = this.fnError;
+      this.error = this.fn_error;
       return null;
     }
     // make shallow copy of scoped vars,
     // and add built in variables interval and interval_ms
     const scopedVars = (this.scopedVars = Object.assign({}, this.panel.scopedVars, {
-      __interval: { text: this.interval, value: this.interval },
-      __interval_ms: { text: this.intervalMs, value: this.intervalMs },
+      __interval: {text: this.interval, value: this.interval},
+      __interval_ms: {text: this.intervalMs, value: this.intervalMs},
     }));
 
     // This lets us see the parameters in the editor
     if (this.debugParams) {
       this.debugParams = {};
-      _.each(scopedVars, (v: any, k: any) => {
+      _.each(scopedVars, (v, k) => {
         this.debugParams[k] = v.text;
       });
-      _.each(this.templateSrv.variables, (v: any) => {
+      _.each(this.templateSrv.variables, v => {
         this.debugParams[v.name] = v.getValueForUrl();
       });
     }
@@ -258,7 +257,7 @@ class AjaxCtrl extends MetricsPanelCtrl {
       const url = this.templateSrv.replace(this.panel.url, scopedVars);
       const params = this.getCurrentParams();
 
-      const options: any = {
+      let options: any = {
         method: this.panel.method,
         responseType: this.panel.responseType,
         url: url,
@@ -271,7 +270,7 @@ class AjaxCtrl extends MetricsPanelCtrl {
 
       let helper = Promise.resolve({});
       if (this.panel.request === 'datasource') {
-        helper = this.datasourceSrv.get(this.panel.datasource).then((ds: any) => {
+        helper = this.datasourceSrv.get(this.panel.datasource).then(ds => {
           console.log('DDDD', ds, this);
           if (ds) {
             this.dsInfo = new DSInfo(ds);
@@ -286,7 +285,6 @@ class AjaxCtrl extends MetricsPanelCtrl {
 
             options.url = this.dsInfo.baseURL + url;
           } else {
-            // @ts-ignore
             this.dsInfo = null;
           }
         });
@@ -305,18 +303,18 @@ class AjaxCtrl extends MetricsPanelCtrl {
       this.loading = true;
       helper.then(() => {
         this.backendSrv.datasourceRequest(options).then(
-          (response: any) => {
+          response => {
             this.lastRequestTime = sent;
             this.process(response);
             this.loading = false;
           },
-          (err: any) => {
+          err => {
             console.log('ERR', err);
             this.lastRequestTime = sent;
             this.loading = false;
 
             this.error = err; //.data.error + " ["+err.status+"]";
-            this.inspector = { error: err };
+            this.inspector = {error: err};
             this.showError('Request Error', err);
           }
         );
@@ -328,7 +326,8 @@ class AjaxCtrl extends MetricsPanelCtrl {
   }
 
   // Overrides the default handling (error for null result)
-  handleQueryResult(result: DataQueryResponse) {
+  handleQueryResult(result) {
+    // console.log('handleQueryResult', result, Date.now(), this.loading);
     this.loading = false;
     if (result) {
       if (this.isUsingMetricQuery()) {
@@ -343,7 +342,7 @@ class AjaxCtrl extends MetricsPanelCtrl {
     this.updateTemplate();
     $(window).on(
       'resize',
-      _.debounce((fn: any) => {
+      _.debounce(fn => {
         this.refresh();
       }, 250)
     );
@@ -356,33 +355,45 @@ class AjaxCtrl extends MetricsPanelCtrl {
 
   onInitEditMode() {
     this.debugParams = {};
-    this.addEditorTab('Request', 'public/plugins/' + this.pluginId + '/partials/editor.request.html', 2);
-    this.addEditorTab('Display', 'public/plugins/' + this.pluginId + '/partials/editor.display.html', 3);
-    this.addEditorTab('Examples', 'public/plugins/' + this.pluginId + '/partials/editor.examples.html', 5);
+    this.addEditorTab(
+      'Request',
+      'public/plugins/' + this.pluginId + '/partials/editor.request.html',
+      2
+    );
+    this.addEditorTab(
+      'Display',
+      'public/plugins/' + this.pluginId + '/partials/editor.display.html',
+      3
+    );
+    this.addEditorTab(
+      'Examples',
+      'public/plugins/' + this.pluginId + '/partials/editor.examples.html',
+      5
+    );
     this.editorTabIndex = 2;
     this.updateFN();
   }
 
   updateFN() {
-    this.fnError = null;
-    this.paramsFn = undefined;
+    this.fn_error = null;
+    this.params_fn = undefined;
 
     if (this.panel.params_js) {
       try {
-        this.paramsFn = new Function('ctrl', 'return ' + this.panel.params_js);
+        this.params_fn = new Function('ctrl', 'return ' + this.panel.params_js);
       } catch (ex) {
         console.warn('error parsing params_js', this.panel.params_js, ex);
-        this.paramsFn = undefined;
-        this.fnError = ex;
+        this.params_fn = undefined;
+        this.fn_error = ex;
       }
     }
     if (this.panel.header_js) {
       try {
-        this.headerFn = new Function('ctrl', 'return ' + this.panel.header_js);
+        this.header_fn = new Function('ctrl', 'return ' + this.panel.header_js);
       } catch (ex) {
         console.warn('error parsing header_js', this.panel.header_js, ex);
-        this.headerFn = undefined;
-        this.fnError = ex;
+        this.header_fn = undefined;
+        this.fn_error = ex;
       }
     }
     this.onConfigChanged();
@@ -391,7 +402,7 @@ class AjaxCtrl extends MetricsPanelCtrl {
   updateTemplate() {
     let txt = '';
     this.isIframe = this.panel.method === 'iframe';
-    if (this.panel.mode === RenderMode.template) {
+    if (this.panel.mode == RenderMode.template) {
       if (!this.panel.template) {
         this.panel.template = '<pre>{{ response }}</pre>';
       }
@@ -403,7 +414,7 @@ class AjaxCtrl extends MetricsPanelCtrl {
           '<iframe \
           frameborder="0" \
           width="100%"  \
-          height="100%" \
+          height="{{ ctrl.height }}" \
           ng-src="{{ url }}" \
           ng-if="ctrl.panel.method === \'iframe\'"></iframe>';
       } else {
@@ -437,14 +448,8 @@ class AjaxCtrl extends MetricsPanelCtrl {
     }
     //console.log('UPDATE template', this.panel, txt);
 
-    if (txt) {
-      this.ngtemplate.html(txt);
-      this.ngtemplate.css('display', 'block');
-      this.$compile(this.ngtemplate.contents())(this.$scope);
-    } else {
-      this.ngtemplate.css('display', 'none');
-    }
-
+    this.ngtemplate.html(txt);
+    this.$compile(this.ngtemplate.contents())(this.$scope);
     if (this.$scope.response) {
       this.render();
     }
@@ -459,10 +464,8 @@ class AjaxCtrl extends MetricsPanelCtrl {
     }
 
     let txt = `<h1>${msg}</h1>`;
-    if (err && this.panel.showErrors) {
+    if (err) {
       txt += '<pre>' + JSON.stringify(err) + '</pre>';
-    } else {
-      txt += '<pre>Something went wrong while executing your request.</pre>';
     }
 
     this.ngtemplate.html(txt);
@@ -482,13 +485,13 @@ class AjaxCtrl extends MetricsPanelCtrl {
         } else if ('recieve' === this.panel.showTimeValue) {
           when = Date.now();
         } else if (this.panel.showTimeValue.startsWith('header-')) {
-          const h = this.panel.showTimeValue.substring('header-'.length);
-          const v = rsp.headers[h];
+          let h = this.panel.showTimeValue.substring('header-'.length);
+          let v = rsp.headers[h];
           if (v) {
             console.log('TODO, parse header', v, h);
           } else {
-            const vals: any = {};
-            for (const key in rsp.headers()) {
+            let vals: any = {};
+            for (let key in rsp.headers()) {
               vals[key] = rsp.headers[key];
             }
             console.log('Header:', h, 'not found in:', vals, rsp);
@@ -511,7 +514,7 @@ class AjaxCtrl extends MetricsPanelCtrl {
     }
     this.$scope.response = rsp.hasOwnProperty('data') ? rsp.data : rsp;
 
-    let contentType = '';
+    let contentType: string = '';
     if (rsp.hasOwnProperty('headers')) {
       contentType = rsp.headers('Content-Type');
     }
@@ -530,7 +533,7 @@ class AjaxCtrl extends MetricsPanelCtrl {
         this.img.css('display', 'block');
 
         // If we get an image, change the display to image type
-        if (this.panel.mode !== RenderMode.image) {
+        if (this.panel.mode != RenderMode.image) {
           this.panel.mode = RenderMode.image;
           this.updateTemplate();
         }
@@ -546,7 +549,7 @@ class AjaxCtrl extends MetricsPanelCtrl {
     }
 
     // JSON Node needs to force refresh
-    if (this.panel.mode === RenderMode.json) {
+    if (this.panel.mode == RenderMode.json) {
       this.updateTemplate();
     }
   }
@@ -560,7 +563,7 @@ class AjaxCtrl extends MetricsPanelCtrl {
     });
   }
 
-  link(scope: any, elem: any, attrs: any, ctrl: any) {
+  link(scope, elem, attrs, ctrl) {
     this.img = $(elem.find('img')[0]);
     this.ngtemplate = $(elem.find('.ngtemplate')[0]);
     this.overlay = $(elem.find('.ajaxmodal')[0]);
@@ -570,4 +573,4 @@ class AjaxCtrl extends MetricsPanelCtrl {
   }
 }
 
-export { AjaxCtrl, AjaxCtrl as PanelCtrl };
+export {AjaxCtrl, AjaxCtrl as PanelCtrl};

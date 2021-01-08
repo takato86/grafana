@@ -28,12 +28,7 @@ The AJAX Panel is a general way to load external content into a grafana dashboar
 
 #### Changelog
 
-##### v0.0.7
-* building with @grafana/toolkit
-* Tested with Grafana 6.3
-* fix height issue with iframes
-
-##### v0.0.6
+##### v0.0.6 (not released yet)
 
 * Support requests to /api (grafana internal API)
 * Adding circleci build
