@@ -72,15 +72,15 @@ http://localhost:8000/safie
 
 14. gitよりソースコードを取得してください。
 git clone https://[bitbucketのアカウント名]@bitbucket.org/datumix/grafana.git
-cd grafana
 
 15. 下記リンクよりnode.jsをインストールしてください。
 https://nodejs.org/en/download/
 
 16. パッケージをインストールしてください。
-grafanaディレクトリ直下で下記コマンドを実行してください。
+cd grafana
 npm install yarn
 yarn install
+./bin/grafana-cli plugins install ryantxu-ajax-panel
 
 17. grafanaを実行してください。
 yarn start &
